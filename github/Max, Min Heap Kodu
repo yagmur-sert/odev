@@ -1,0 +1,72 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int heap[100];
+int boyut = 0;
+
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+void heapifyUp(int index) {
+    int ebeveyn = (index - 1) / 2;
+    if (index > 0 && heap[index] > heap[ebeveyn]) {
+        swap(&heap[index], &heap[ebeveyn]);
+        heapifyUp(ebeveyn);
+    }
+}
+
+void heapifyDown(int index) {
+    int enBuyuk = index;
+    int sol = 2 * index + 1;
+    int sag = 2 * index + 2;
+
+    if (sol < boyut && heap[sol] > heap[enBuyuk])
+        enBuyuk = sol;
+
+    if (sag < boyut && heap[sag] > heap[enBuyuk])
+        enBuyuk = sag;
+
+    if (enBuyuk != index) {
+        swap(&heap[index], &heap[enBuyuk]);
+        heapifyDown(enBuyuk);
+    }
+}
+
+void ekle(int veri) {
+    heap[boyut] = veri;
+    boyut++;
+    heapifyUp(boyut - 1);
+}
+
+int enBuyuguCikar() {
+    if (boyut <= 0) return -1;
+    
+    int kok = heap[0];
+    heap[0] = heap[boyut - 1];
+    boyut--;
+    heapifyDown(0);
+    
+    return kok;
+}
+
+void listele() {
+    for (int i = 0; i < boyut; i++) printf("%d ", heap[i]);
+    printf("\n");
+}
+
+int main() {
+    ekle(50);
+    ekle(30);
+    ekle(20);
+    ekle(40);
+    ekle(70);
+
+    listele();
+    printf("Cikarilan: %d\n", enBuyuguCikar());
+    listele();
+
+    return 0;
+}
