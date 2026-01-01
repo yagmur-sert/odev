@@ -1,0 +1,90 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node *next;
+    struct Node *prev;
+};
+
+struct Node *baslangic = NULL;
+
+void arayaEkle(int veri, int hedefVeri) {
+    struct Node *yeni = (struct Node*)malloc(sizeof(struct Node));
+    yeni->data = veri;
+
+    if (baslangic == NULL) return;
+
+    struct Node *temp = baslangic;
+    do {
+        if (temp->data == hedefVeri) {
+            yeni->next = temp->next;
+            yeni->prev = temp;
+            temp->next->prev = yeni;
+            temp->next = yeni;
+            return;
+        }
+        temp = temp->next;
+    } while (temp != baslangic);
+}
+
+void sil(int silinecek) {
+    if (baslangic == NULL) return;
+
+    struct Node *temp = baslangic;
+    do {
+        if (temp->data == silinecek) {
+            if (temp->next == temp) {
+                baslangic = NULL;
+            } else {
+                temp->prev->next = temp->next;
+                temp->next->prev = temp->prev;
+                if (temp == baslangic) baslangic = temp->next;
+            }
+            free(temp);
+            return;
+        }
+        temp = temp->next;
+    } while (temp != baslangic);
+}
+
+void listele() {
+    if (baslangic == NULL) return;
+    struct Node *temp = baslangic;
+    do {
+        printf("%d <-> ", temp->data);
+        temp = temp->next;
+    } while (temp != baslangic);
+    printf("(Baslangic)\n");
+}
+
+void sonaEkle(int veri) {
+    struct Node *yeni = (struct Node*)malloc(sizeof(struct Node));
+    yeni->data = veri;
+    if (baslangic == NULL) {
+        baslangic = yeni;
+        yeni->next = yeni;
+        yeni->prev = yeni;
+    } else {
+        struct Node *son = baslangic->prev;
+        yeni->next = baslangic;
+        baslangic->prev = yeni;
+        yeni->prev = son;
+        son->next = yeni;
+    }
+}
+
+int main() {
+    sonaEkle(10);
+    sonaEkle(20);
+    sonaEkle(30);
+    listele();
+
+    arayaEkle(25, 20);
+    listele();
+
+    sil(20);
+    listele();
+
+    return 0;
+}
