@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int parent[100];
+
+int find(int i) {
+    if (parent[i] == i)
+        return i;
+    return parent[i] = find(parent[i]);
+}
+
+void birlestir(int i, int j) {
+    int root_i = find(i);
+    int root_j = find(j);
+    if (root_i != root_j) {
+        parent[root_i] = root_j;
+    }
+}
+
+int main() {
+    int dugum_sayisi = 6;
+    int kenar_sayisi = 3;
+    int edges[3][2] = {{0, 1}, {1, 2}, {3, 4}}; // Bağlantı dizisi
+
+    for (int i = 0; i < dugum_sayisi; i++)
+        parent[i] = i;
+
+    for (int i = 0; i < kenar_sayisi; i++) {
+        birlestir(edges[i][0], edges[i][1]);
+    }
+
+    printf("Cluster Gruplari:\n");
+    for (int i = 0; i < dugum_sayisi; i++) {
+        printf("Dugum %d -> Cluster Root: %d\n", i, find(i));
+    }
+
+    return 0;
+}
