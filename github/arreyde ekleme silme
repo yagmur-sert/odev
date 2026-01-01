@@ -1,0 +1,39 @@
+#include <stdio.h>
+
+void listele(int dizi[], int n) {
+    for (int i = 0; i < n; i++) printf("%d ", dizi[i]);
+    printf("\n");
+}
+
+void arayaEkle(int dizi[], int *n, int veri, int indis) {
+    for (int i = *n; i > indis; i--) {
+        dizi[i] = dizi[i - 1];
+    }
+    dizi[indis] = veri;
+    (*n)++;
+}
+
+void sil(int dizi[], int *n, int indis) {
+    for (int i = indis; i < *n - 1; i++) {
+        dizi[i] = dizi[i + 1];
+    }
+    (*n)--;
+}
+
+int main() {
+    int dizi[100] = {10, 20, 30, 40, 50};
+    int n = 5;
+
+    printf("Ilk hali: ");
+    listele(dizi, n);
+
+    arayaEkle(dizi, &n, 25, 2); 
+    printf("2. indise 25 eklendi: ");
+    listele(dizi, n);
+
+    sil(dizi, &n, 3); 
+    printf("3. indisteki eleman silindi: ");
+    listele(dizi, n);
+
+    return 0;
+}
